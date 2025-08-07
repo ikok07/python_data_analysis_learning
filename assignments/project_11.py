@@ -6,12 +6,11 @@ def main():
    oil_prices = pd.Series(oil_data["dcoilwtico"].iloc[1000:1100], name="Oil Prices")
    oil_prices.index = oil_data["date"].iloc[1000:1100]
 
-   oil_prices = oil_prices.where(~oil_prices.isin([51.44, 47.83]), np.nan)
+   higher_prices = oil_prices * 1.1 + 2
+   max_price = oil_prices.max()
+   prices_difference = pd.Series((oil_prices - max_price)/max_price)
 
-   print(f"Missing values count: {oil_prices[oil_prices.isna()].value_counts(dropna=False).values[0]}")
-
-   oil_prices = oil_prices.fillna(oil_prices.median())
-   print(oil_prices)
+   months = pd.Series(oil_prices.index.str.split("-").str[1].astype("int"))
 
 if __name__ == "__main__":
     main()
