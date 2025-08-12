@@ -18,6 +18,10 @@ def main():
         day_of_week=transactions_df["date"].dt.day_of_week,
     )
 
+    transactions_df = transactions_df.assign(store_avg_trans=transactions_df.groupby(["store_nbr", "day_of_week"])["transactions"].transform("mean"))
+    transactions_df = transactions_df.assign(trans_vs_avg=transactions_df["transactions"] - transactions_df["store_avg_trans"])
+
+    print(transactions_df)
 
 if __name__ == "__main__":
     main()

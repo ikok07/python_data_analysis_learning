@@ -10,13 +10,9 @@ def main():
     )
     transactions_df["month"] = transactions_df["date"].dt.month
 
-    transactions_df = transactions_df.assign(
-        target_pct=transactions_df["transactions"] / 2500,
-        met_target=(transactions_df["transactions"] / 2500) >= 1,
-        bonus_payable=((transactions_df["transactions"] / 2500) >= 1) * 100,
-        week=transactions_df["date"].dt.isocalendar().week,
-        day_of_week=transactions_df["date"].dt.day_of_week,
-    )
+    top10_stores = transactions_df.groupby(["store_nbr", "month"])[["transactions"]].sum().sort_values(["month", "transactions"], ascending=[True, False])
+    print(top10_stores)
+
 
 
 if __name__ == "__main__":

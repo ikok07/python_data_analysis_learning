@@ -18,6 +18,22 @@ def main():
         day_of_week=transactions_df["date"].dt.day_of_week,
     )
 
+    pivot = transactions_df[transactions_df["bonus_payable"] > 0].pivot_table(
+        index="store_nbr",
+        columns="day_of_week",
+        values="bonus_payable",
+        aggfunc="sum",
+        margins=True
+    )
+
+    unpivot = pivot.reset_index().melt(
+        id_vars="store_nbr",
+        value_vars=[0, 1, 2, 3, 4, 5, 6],
+        var_name="day_of_week",
+        value_name="Total bonuses"
+    )
+
+    print(unpivot)
 
 if __name__ == "__main__":
     main()
